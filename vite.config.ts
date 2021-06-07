@@ -21,7 +21,7 @@ export default defineConfig((async () => {
     },
     plugins: [
       reactRefresh(),
-      metadata(),
+      // metadata(),
       // {
       //   name: 'testing',
       //   resolveDynamicImport: (specifier, importer) => {
@@ -42,7 +42,7 @@ export default defineConfig((async () => {
       {
         name: 'testing',
         resolveId: (source, importer, options) => {
-          console.log(source);
+          console.log({ source, importer, options });
 
           const foundReplace = replacements.find((replacement) => replacement.find === source);
 
