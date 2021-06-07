@@ -41,8 +41,10 @@ export default defineConfig((async () => {
       // },
       {
         name: 'testing',
-        resolveId: (source, importer, options) => {
-          console.log({ source, importer, options });
+        async resolveId(source, importer, options) {
+          const resolved = await this.resolve(source, importer, { skipSelf: true })
+          console.log(resolved.id);
+
 
           const foundReplace = replacements.find((replacement) => replacement.find === source);
 
