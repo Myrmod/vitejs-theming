@@ -1,0 +1,269 @@
+root: true
+env:
+  browser: true
+  es2021: true
+extends:
+  - 'eslint:recommended'
+parser: '@typescript-eslint/parser'
+parserOptions:
+  project: './tsconfig.json'
+  ecmaVersion: 2021
+  sourceType: module
+overrides:
+  # Use the TypeScript linter only for .ts files
+  - files:
+    - '*.ts'
+    plugins:
+      - '@typescript-eslint'
+    extends:
+      - 'plugin:@typescript-eslint/recommended'
+
+  # Use the TypeScript and React linter only for .tsx files
+  - files:
+    - '*.tsx'
+    plugins:
+      - '@typescript-eslint'
+      - 'react'
+    extends:
+      - 'plugin:@typescript-eslint/recommended'
+      - 'plugin:react/recommended'
+    parserOptions:
+      ecmaFeatures:
+        jsx: true
+    settings:
+      react:
+        version: detect
+
+  # Use the node environment only for configuration files with JavaScript syntax on the main level of the project
+  - files:
+    - './*.config.js'
+    env:
+      node: true
+
+rules:
+  # Common JavaScript/TypeScript rules
+  arrow-body-style:
+    - warn
+    - as-needed
+  arrow-parens:
+    - warn
+  brace-style:
+    - warn
+    - 1tbs
+  class-methods-use-this:
+    - warn
+    - exceptMethods:
+      - componentDidCatch # React Error Boundaries must be classes, but the method componentDidCatch does not need to use "this"
+  comma-dangle:
+    - warn
+    - arrays: always-multiline
+      objects: always-multiline
+      imports: always-multiline
+      exports: always-multiline
+      functions: always-multiline
+  comma-style:
+    - warn
+    - last
+  consistent-return:
+    - error
+    - treatUndefinedAsUnspecified: true
+  constructor-super:
+    - error
+  curly:
+    - error
+    - all
+  default-case:
+    - warn
+  default-case-last:
+    - error
+  dot-notation:
+    - warn
+  eol-last:
+    - warn
+    - always
+  eqeqeq:
+    - warn
+    - always
+  func-style:
+    - warn
+    - declaration
+    - allowArrowFunctions: true
+  guard-for-in:
+    - warn
+  indent:
+    - warn
+    - 3
+    - SwitchCase: 1
+  jsx-quotes:
+    - warn
+    - prefer-single
+  new-parens:
+    - error
+    - always
+  no-array-constructor:
+    - warn
+  no-bitwise:
+    - error
+  no-console:
+    - warn
+    - allow:
+      - warn
+      - error
+  no-eval:
+    - error
+  no-invalid-this:
+    - error
+  no-multiple-empty-lines:
+    - warn
+    - max: 1
+  no-new-wrappers:
+    - warn
+  no-shadow:
+    - off
+  no-template-curly-in-string:
+    - error
+  no-trailing-spaces:
+    - warn
+  no-undef-init:
+    - warn
+  no-unused-expressions:
+    - warn
+  no-var:
+    - warn
+  one-var:
+    - error
+    - never
+  padding-line-between-statements:
+    - warn
+    - blankLine: always
+      prev:
+        - const
+        - let
+        - var
+      next: block
+    - blankLine: always
+      prev:
+        - const
+        - let
+        - var
+      next: block-like
+    - blankLine: always
+      prev: '*'
+      next: return
+  prefer-const:
+    - warn
+  prefer-template:
+    - warn
+  quotes:
+    - warn
+    - single
+    - avoidEscape: true
+      allowTemplateLiterals: true
+  radix:
+    - error
+    - always
+  semi:
+    - off # Is turned off to enable @typescript-eslint/member-delimiter-style
+    # - error
+    # - always
+  sort-imports:
+    - off
+    - warn
+    - ignoreCase: true
+      allowSeparatedGroups: true
+  sort-keys:
+    - off
+  space-before-function-paren:
+    - warn
+    - anonymous: always
+      asyncArrow: always
+      named: never
+  spaced-comment:
+    - warn
+    - always
+    - markers:
+      - '/'
+  space-in-parens:
+    - warn
+    - never
+  use-isnan:
+    - warn
+  yoda:
+    - warn
+    - never
+
+  # TypeScript-specific rules
+  '@typescript-eslint/array-type':
+    - warn
+    - options:
+      default: generic
+  '@typescript-eslint/explicit-member-accessibility':
+    - error
+    - accessibility: explicit # "explicit" requires both public and private. A 'no-private' option does not exist.
+      overrides:
+        constructors: no-public
+  '@typescript-eslint/member-delimiter-style':
+    - error
+    - singleline:
+        delimiter: comma
+        requireLast: false
+  '@typescript-eslint/explicit-module-boundary-types':
+    - error
+  '@typescript-eslint/member-ordering':
+    - warn
+  '@typescript-eslint/naming-convention':
+    - warn
+    - selector: variable
+      format:
+        - camelCase
+    - selector: variable
+      modifiers:
+        - global
+      format:
+        - UPPER_CASE
+    - selector: variable
+      types:
+        - function
+      format:
+        - camelCase
+    - selector: class
+      format:
+        - PascalCase
+    - selector: enum
+      format:
+        - PascalCase
+    - selector: interface
+      format:
+        - PascalCase
+    - selector: function
+      format:
+        - camelCase
+    # The following rule is only here for React's function components. The camelCase format is used as a fallback for regular exported functions.
+    - selector: function
+      modifiers:
+        - exported
+        - global
+      format:
+        - PascalCase
+        - camelCase
+  '@typescript-eslint/no-empty-interface':
+    - warn
+  '@typescript-eslint/no-explicit-any':
+    - warn
+  '@typescript-eslint/no-for-in-array':
+    - warn
+  '@typescript-eslint/no-this-alias':
+    - warn
+  '@typescript-eslint/no-unnecessary-boolean-literal-compare':
+    - warn
+  '@typescript-eslint/prefer-for-of':
+    - warn
+  '@typescript-eslint/prefer-readonly':
+    - warn
+  '@typescript-eslint/semi':
+    - error
+  '@typescript-eslint/triple-slash-reference':
+    - error
+    - path: never
+      types: never
+      lib: never
