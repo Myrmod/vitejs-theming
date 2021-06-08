@@ -7,71 +7,32 @@ import replace from './build-plugins/rollup/replace-files'
 import metadata from './build-plugins/rollup/metadata'
 import getThemeDefines from './build-plugins/getThemeDefines'
 
-import fs from 'fs'
-
 /**
  * https://vitejs.dev/config/
  */
 export default defineConfig((async () => {
-  const replacements = await aliases(__dirname);
+   const replacements = await aliases(__dirname);
 
-  return {
-    build: {
-      outDir: 'build',
-    },
-    plugins: [
-      reactRefresh(),
-      // metadata(),
-      // {
-      //   name: 'testing',
-      //   resolveDynamicImport: (specifier, importer) => {
-      //     console.log({ specifier, importer });
-
-      //     return null;
-      //   },
-      // },
-      // {
-      //   name: 'testing',
-      //   async buildStart() {
-      //     const resolution = await this.resolve('foo', undefined, {
-      //       custom: { resolving: { specialResolution: true } }
-      //     });
-      //     console.log(resolution.id);
-      //   }
-      // },
-      {
-        name: 'testing',
-        async resolveId(source, importer, options) {
-          const resolved = await this.resolve(source, importer, { skipSelf: true })
-          console.log(resolved.id);
-
-
-          const foundReplace = replacements.find((replacement) => replacement.find === source);
-
-          if (foundReplace) {
-            console.info(`replace "${foundReplace.find}" with "${foundReplace.replacement}"`);
-
-            try {
-              // return new file content
-              return {
-                id: foundReplace.replacement,
-              };
-            } catch (err) {
-              console.error(err);
-
-              return null;
-            }
-          }
-
-          return null;
-        },
+   return {
+      build: {
+         outDir: 'build',
       },
-      // replace(replacements), // doesn't resolve further imports correctly
-    ],
 
-    define: {
-      ...buildDefines(),
-      ...getThemeDefines(),
-    },
-  };
+      plugins: [
+         reactRefresh(),
+         metadata(),
+         replace(replacements), // doesn't resolve further imports correctly
+      ],
+
+      define: {
+         ...buildDefines(),
+         ...getThemeDefines(),
+      },
+
+      resolve: {
+         alias: {
+            "$core": "src"
+         },
+      },
+   };
 })())

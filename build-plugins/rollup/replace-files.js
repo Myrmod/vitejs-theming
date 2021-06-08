@@ -1,8 +1,7 @@
-import fs from 'fs'
-
 /**
  * @function replaceFiles
  * @param {({find: string, replacement: string})[]} replacements
+ * @return {({name: "rollup-plugin-replace-files", enforce: "pre", Promise<resolveId>})}
  */
 export default function replaceFiles(replacements) {
    if (!replacements?.length) {
@@ -11,18 +10,19 @@ export default function replaceFiles(replacements) {
 
    return {
       name: 'rollup-plugin-replace-files',
-      load: async (id) => {
-         const foundReplace = replacements.find((replacement) => replacement.find === id);
+      enforce: 'pre',
+      async resolveId(source, importer) {
+         const resolved = await this.resolve(source, importer, { skipSelf: true })
+
+         const foundReplace = replacements.find((replacement) => replacement.find === resolved.id);
 
          if (foundReplace) {
             console.info(`replace "${foundReplace.find}" with "${foundReplace.replacement}"`);
 
             try {
-               const code = fs.readFileSync(foundReplace.replacement, 'utf8');
-
                // return new file content
                return {
-                  code,
+                  id: foundReplace.replacement,
                };
             } catch (err) {
                console.error(err);
@@ -32,6 +32,6 @@ export default function replaceFiles(replacements) {
          }
 
          return null;
-      }
+      },
    }
 }

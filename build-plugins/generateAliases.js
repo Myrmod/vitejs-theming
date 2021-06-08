@@ -15,10 +15,20 @@ export default async function generateAliases(dirname) {
 
    replacements.forEach((replacement) => {
       if (typeof replacement === 'string') {
-
          aliases.push({
             find: path.resolve(dirname, `src/${replacement}`),
             replacement: path.resolve(dirname, `${themePath}/${replacement}`),
+         });
+      }
+
+      if (
+         typeof replacement === 'object' &&
+         typeof replacement.find === 'string' &&
+         typeof replacement.replacement === 'string'
+      ) {
+         aliases.push({
+            find: path.resolve(dirname, `src/${replacement.find}`),
+            replacement: path.resolve(dirname, `${themePath}/${replacement.replacement}`),
          });
       }
    });
