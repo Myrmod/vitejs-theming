@@ -21,7 +21,7 @@ export default defineConfig((async () => {
       plugins: [
          reactRefresh(),
          metadata(),
-         replace(replacements), // doesn't resolve further imports correctly
+         replace(replacements),
       ],
 
       define: {
